@@ -47,7 +47,7 @@ def update_metrics():
                         html.H4(f'{lon} мА', className="card-title"),
                     ]
                 ),
-            ], color='primary', outline=True,
+            ],
             style={"width": "18rem", 'margin': '16px', 'margin-top': '0px'},
         ),
         dbc.Card(
@@ -66,7 +66,7 @@ def update_metrics():
                 dbc.CardHeader("Максимальная освещенность"),
                 dbc.CardBody(
                     [
-                        html.H4(f'{alt}', className="card-title"),
+                        html.H4(f'{alt} МилиВт/см2', className="card-title"),
                     ]
                 ),
             ],
@@ -77,7 +77,7 @@ def update_metrics():
                 dbc.CardHeader("Максимальная яркость"),
                 dbc.CardBody(
                     [
-                        html.H4(f'{bright}', className="card-title"),
+                        html.H4(f'{bright} Люкс', className="card-title"),
                     ]
                 ),
             ],
@@ -93,8 +93,8 @@ def update_metrics():
 def update_pie_live():
     df = pd.read_csv("LOG00194.csv")
     labels = ['LPG', 'CH4', 'CO', 'H2', 'CO2']
-    values = [df['LPG'].sum().tolist(), df['CH4'].sum().tolist(), df['CO'].sum().tolist(), df['H2'].sum().tolist(),
-              df['CO2'].sum().tolist()]
+    values = [df['LPG'].iloc[3].tolist(), df['CH4'].iloc[3].tolist(), df['CO'].iloc[3].tolist(), df['H2'].iloc[3].tolist(),
+              df['CO2'].iloc[3].tolist()]
     fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
     fig.update_layout(height=285)
     return fig
@@ -106,10 +106,9 @@ def update_pie_live():
 
 def update_pie_live1():
     df = pd.read_csv("LOG00194.csv")
-    labels = ['LPG(2)', 'CH4(2)', 'CO(2)', 'H2(2)']
-    values = [df['LPG(2)'].sum().tolist(), df['CH4(2)'].sum().tolist(),
-              df['CO(2)'].sum().tolist(),
-              df['H2(2)'].sum().tolist()]
+    labels = ['LPG', 'CH4', 'CO', 'H2', 'CO2']
+    values = [df['LPG'].iloc[679].tolist(), df['CH4'].iloc[679].tolist(), df['CO'].iloc[679].tolist(), df['H2'].iloc[679].tolist(),
+              df['CO2'].iloc[679].tolist()]
     fig = go.Figure(data=[go.Pie(labels=labels, values=values)])
     fig.update_layout(height=285)
     return fig
@@ -508,7 +507,7 @@ cards = html.Div(
                            style={"width": "38%", "height": "370px", 'display': 'block', 'float': 'left', 'margin':
                                '19px', 'margin-top': '15px'})]),
         html.Div(dbc.Card(
-            [dbc.CardHeader('Газоанализатор 1'), dbc.CardBody(
+            [dbc.CardHeader('Состав воздуха на земле'), dbc.CardBody(
                 [
                     dcc.Graph(figure=update_pie_live())
                 ]
@@ -516,7 +515,7 @@ cards = html.Div(
             className="mb-3", ), style={'float': 'left', 'width': '18%', 'margin-left': '27px', 'margin-right': '19px'}
         ),
         html.Div(dbc.Card(
-            [dbc.CardHeader('Газоанализатор 2'), dbc.CardBody(
+            [dbc.CardHeader('Состав воздуха на максимальной высоте'), dbc.CardBody(
                 [
                     dcc.Graph(figure=update_pie_live1())
                 ]
@@ -570,17 +569,7 @@ cards = html.Div(
                     ), ]
                     ,
                     className="mb-3",
-                ), style={'margin': '10px', 'width': '625px', 'float': 'left', 'margin-left': '45px'}),
-                html.Div(dbc.Card(
-                    [dbc.CardHeader("Количество включений нагревателя"), dbc.CardBody(
-                        [
-                            html.H4(f'{heating}', className="card-title", style={'margin-bottom': '5px', 'margin-top': '15px', 'font-size': '25px'}),
-                            html.P("Раз", className="card-text", style={'font-size': '15px'})
-                        ]
-                    ), ]
-                    ,
-                    className="mb-3", style={'height': '175px'}
-                ), style={'margin': '10px', 'width': '100px', 'float': 'left'})
+                ), style={'margin': '10px', 'width': '745px', 'float': 'left', 'margin-left': '45px'})
             ]),
                 html.Div(dbc.Card(
                     [dbc.CardHeader("Давление от времени"), dbc.CardBody(
@@ -597,8 +586,11 @@ cards = html.Div(
 )
 app.layout = html.Div(
     html.Div([
-        html.Header('Satellite Live Feed', style={'background-color': '#24292f', 'color': '#ffffff', 'text-indent': '20px'}),
+        html.Header('UG Satellite Feed', style={'background-color': '#24292f', 'color': '#ffffff', 'text-indent': '20px', 'height': '25px',
+                                                  'display': 'flex', 'justify-content': 'left', 'align-items': 'center', 'font-size': '15px'}),
         cards,
+        html.Footer('© Copyright. All rights reserved.', style={"clear": "both",'background-color': '#24292f', 'color': '#ffffff', 'text-indent': '20px', 'height': '50px',
+                                                  'font-size': '10px', 'display': 'flex', 'justify-content': 'center', 'align-items': 'center'})
     ])
 
 )
